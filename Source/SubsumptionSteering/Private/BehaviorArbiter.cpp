@@ -8,21 +8,22 @@ BehaviorArbiter::BehaviorArbiter(AActor *actr)
 	:actor(actr)
 {
 	currentBehavior = nullptr;
-	AddBehavior(STEER, new SteerBehavior(actr));
-	AddBehavior(WANDER, new WanderBehavior(actr));
+	AddBehaviorLevel(STEER, new SteerBehavior(actr));
+	AddBehaviorLevel(WANDER, new WanderBehavior(actr));
 }
 
 BehaviorArbiter::~BehaviorArbiter()
 {
 }
 
-void BehaviorArbiter::AddBehavior(BehaviorEnum name, BehaviorInterface* behavior) {
+void BehaviorArbiter::AddBehaviorLevel(BehaviorEnum name, BehaviorInterface* behavior) {
 	behaviorMap.Add(name, behavior);
 }
-void BehaviorArbiter::StartBehavior() {
+void BehaviorArbiter::StartBehavior() 
+{
 	for (auto i : behaviorMap) {
-		i.Value->Start([&]() {
-			behaviorQueue.HeapPush(NodePriority(i.Value), NodePriorityPredicate());
+		i.Value->Start([&](BehaviorInterface* behavior) {
+			behaviorQueue.HeapPush(NodePriority(behavior), NodePriorityPredicate());
 		});
 	}
 }
@@ -41,6 +42,11 @@ void BehaviorArbiter::RunBehavior() {
 	if (behaviorQueue.Num() != 0)
 	behaviorQueue.Empty();
 }
-void BehaviorArbiter::UpdateBehavior() {
-
+void BehaviorArbiter::UpdateBehavior() 
+{
+	for (auto i : behaviorMap) {
+		i.Value->Start([&](BehaviorInterface* behavior) {
+			behaviorQueue.HeapPush(NodePriority(behavior), NodePriorityPredicate());
+		});
+	}
 }

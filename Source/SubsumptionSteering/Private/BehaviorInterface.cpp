@@ -15,9 +15,9 @@ BehaviorInterface::~BehaviorInterface()
 {
 }
 
-void BehaviorInterface::Start(std::function<void()> callback) 
+void BehaviorInterface::Start(std::function<void(BehaviorInterface*)> callback) 
 {
-	callback();
+	callback(this);
 }
 
 void BehaviorInterface::RunBehavior() 

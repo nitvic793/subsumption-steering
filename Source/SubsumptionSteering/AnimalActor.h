@@ -29,10 +29,12 @@ protected:
 	virtual void BeginPlay() override;
 	void SteeringBehavior();
 	void WanderBehavior();
+	void BehaviorUpdate();
 	FVector Seek(FVector target);
 	FVector velocity;
 	FVector position;
 	BehaviorArbiter *behaviorArbiter;
+	FTimerHandle behaviorTimer;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

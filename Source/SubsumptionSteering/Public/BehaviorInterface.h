@@ -18,7 +18,7 @@ public:
 	BehaviorInterface();
 	BehaviorInterface(AActor *);
 	virtual ~BehaviorInterface();
-	virtual void Start(std::function<void()>);
+	virtual void Start(std::function<void(BehaviorInterface*)>);
 	virtual void RunBehavior();
 	void SetActor(AActor *actr)
 	{

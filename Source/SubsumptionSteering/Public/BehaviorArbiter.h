@@ -51,7 +51,7 @@ protected:
 public:
 	BehaviorArbiter(AActor *);
 	~BehaviorArbiter();
-	void AddBehavior(BehaviorEnum, BehaviorInterface*);
+	void AddBehaviorLevel(BehaviorEnum, BehaviorInterface*);
 	void StartBehavior();
 	void RunBehavior();
 	void UpdateBehavior();
