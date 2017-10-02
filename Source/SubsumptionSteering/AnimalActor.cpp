@@ -4,19 +4,117 @@
 #include <Runtime/Engine/Classes/Engine/World.h>
 #include <Runtime/Engine/Public/TimerManager.h>
 
-class BackgroundWorker : public FRunnable
+class LineTraceWorker : public FRunnable
 {
 public:
-	uint32 Run()
-	{
-
-	}
-protected:
-	BackgroundWorker(AAnimalActor* actr):
+	LineTraceWorker(AAnimalActor* actr) :
 		actor(actr)
 	{
 	}
+	uint32 Run()
+	{
+		UWorld* world = actor->GetWorld();
+		const FName TraceTag("LineTrace");
+		world->DebugDrawTraceTag = TraceTag;
+		FCollisionQueryParams TraceParams(FName(TEXT("LineTrace")), true, actor);
+		TraceParams.bTraceComplex = false;
+		TraceParams.TraceTag = TraceTag;
+		//TraceParams.bTraceAsyncScene = true;
+		TraceParams.bReturnPhysicalMaterial = false;
+		float maxDistance = 1000.f;
+		//Ignore Actors
+		TraceParams.AddIgnoredActor(actor);
+		float sphereRadius = 800.f;
+		FCollisionObjectQueryParams ObjectTraceParams;
+		ObjectTraceParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+		//Re-initialize hit info
+		auto HitOut = FHitResult(ForceInit);
+		while (true) {
+			if (shouldStop)
+				return 0;
+			mMutex.Lock();
+			FVector start = this->actor->GetActorLocation();
+			FVector end = actor->GetActorRotation().Vector() * maxDistance;
+			bool didTrace = world->LineTraceSingleByObjectType(
+				HitOut,
+				start,
+				end,
+				ObjectTraceParams,
+				TraceParams
+			);
+			actor->traceHitResult = HitOut;
+			mMutex.Unlock();
+		}
 
+		auto otherActor = HitOut.GetActor();
+		return 0;
+	}
+
+	void Stop() {
+		shouldStop = true;
+		FRunnable::Stop();
+	}
+protected:
+	bool shouldStop = false;
+	FCriticalSection mMutex;
+	AAnimalActor* actor;
+};
+
+class SphereCollisionWorker : public FRunnable
+{
+public:
+	SphereCollisionWorker(AAnimalActor* actr) :
+		actor(actr)
+	{
+	}
+	uint32 Run()
+	{
+		UWorld* world = actor->GetWorld();
+		const FName TraceTag("LineTrace");
+		world->DebugDrawTraceTag = TraceTag;
+		FCollisionQueryParams TraceParams(FName(TEXT("LineTrace")), true, actor);
+		TraceParams.bTraceComplex = false;
+		TraceParams.TraceTag = TraceTag;
+		//TraceParams.bTraceAsyncScene = true;
+		TraceParams.bReturnPhysicalMaterial = false;
+		float maxDistance = 1000.f;
+		//Ignore Actors
+		TraceParams.AddIgnoredActor(actor);
+
+		float sphereRadius = 200.f;
+		FCollisionObjectQueryParams ObjectTraceParams;
+		ObjectTraceParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+		//Re-initialize hit info
+		auto HitOut = FHitResult(ForceInit);
+		while (true) {
+			if (shouldStop)
+				return 0;
+			mMutex.Lock();
+			FVector start = this->actor->GetActorLocation();
+			FVector end = actor->GetActorRotation().Vector() * maxDistance;
+			bool didSweep = world->SweepSingleByObjectType(
+				HitOut,
+				start,
+				end,
+				FQuat(),
+				ECollisionChannel::ECC_WorldDynamic,
+				FCollisionShape::MakeSphere(sphereRadius),
+				TraceParams
+			);
+			actor->sphereHitResult = HitOut;
+			mMutex.Unlock();
+		}
+		auto otherActor = HitOut.GetActor();
+		return 0;
+	}
+
+	void Stop() {
+		shouldStop = true;
+		FRunnable::Stop();
+	}
+protected:
+	bool shouldStop = false;
+	FCriticalSection mMutex;
 	AAnimalActor* actor;
 };
 
@@ -33,13 +131,21 @@ AAnimalActor::AAnimalActor()
 // Called when the game starts or when spawned
 void AAnimalActor::BeginPlay()
 {
+	traceWorkerThread = FRunnableThread::Create(new LineTraceWorker(this), TEXT("LineTraceThread"));
+	sphereWorkerThread = FRunnableThread::Create(new SphereCollisionWorker(this), TEXT("SphereCollisionThread"));
 	Super::BeginPlay();
 	behaviorArbiter->StartBehavior();
-	//Update behavior every 0.5 seconds
-	GetWorld()->GetTimerManager().SetTimer(behaviorTimer, this, &AAnimalActor::BehaviorUpdate, 0.5f, true, 1.f);
+	//Update behavior every 0.2 seconds
+	GetWorld()->GetTimerManager().SetTimer(behaviorTimer, this, &AAnimalActor::BehaviorUpdate, 0.2f, true, 1.f);
 }
 
-void AAnimalActor::BehaviorUpdate() 
+void AAnimalActor::EndPlay(EEndPlayReason::Type reason) {
+	traceWorkerThread->Kill();
+	sphereWorkerThread->Kill();
+	Super::EndPlay(reason);
+}
+
+void AAnimalActor::BehaviorUpdate()
 {
 	behaviorArbiter->UpdateBehavior();
 }

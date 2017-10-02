@@ -15,5 +15,7 @@ public:
 	~SteerBehavior();
 	bool HasTarget(FVector &OutVector);
 	void Start(std::function<void(BehaviorInterface*)>);
-	void RunBehavior();	
+	void RunBehavior();
+protected:
+	bool targetFixed = false;
 };

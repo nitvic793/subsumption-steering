@@ -27,10 +27,15 @@ public:
 	float slowingRadius = 300.f;
 	UPROPERTY(EditAnywhere, Category="State")
 	int32 health = 100;
+	FHitResult traceHitResult;
+	FHitResult sphereHitResult;
+	FRunnableThread* traceWorkerThread;
+	FRunnableThread* sphereWorkerThread;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(EEndPlayReason::Type) override;
 	void RunTraceThread();
 	void SteeringBehavior();
 	void WanderBehavior();

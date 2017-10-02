@@ -2,13 +2,14 @@
 
 #include "SteerBehavior.h"
 #include "Utility.h"
+#include "AnimalActor.h"
 #include <Runtime/Engine/Classes/Engine/World.h>
 #include <Runtime/Engine/Classes/Engine/EngineTypes.h>
 
 SteerBehavior::SteerBehavior(AActor* actor)
 	:BehaviorInterface(actor)
 {
-	priority = 1;
+	priority = 3;
 }
 
 SteerBehavior::~SteerBehavior()
@@ -17,7 +18,20 @@ SteerBehavior::~SteerBehavior()
 
 void SteerBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 {
-	if (HasTarget(target)) {
+	auto animal = (AAnimalActor*)actor;
+	if (targetFixed) {
+		FVector location = animal->GetActorLocation(); 
+		if ((target - location).IsNearlyZero(0.1f))
+		{
+			targetFixed = false;
+			return;
+		}
+		callback(this);
+		return;
+	}
+	if (animal->traceHitResult.GetActor() != nullptr) {
+		target = animal->traceHitResult.GetActor()->GetActorLocation();
+		targetFixed = true;
 		callback(this);
 	}
 }
