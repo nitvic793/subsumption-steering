@@ -10,6 +10,8 @@
 class SUBSUMPTIONSTEERING_API PursueBehavior : public BehaviorInterface
 {
 public:
-	PursueBehavior();
+	PursueBehavior(AActor*);
 	~PursueBehavior();
+	void Start(std::function<void(BehaviorInterface*)>);
+	void RunBehavior();
 };

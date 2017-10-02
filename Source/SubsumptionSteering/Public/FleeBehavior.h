@@ -10,6 +10,8 @@
 class SUBSUMPTIONSTEERING_API FleeBehavior : public BehaviorInterface
 {
 public:
-	FleeBehavior();
+	FleeBehavior(AActor*);
 	~FleeBehavior();
+	void Start(std::function<void(BehaviorInterface*)>);
+	void RunBehavior();
 };

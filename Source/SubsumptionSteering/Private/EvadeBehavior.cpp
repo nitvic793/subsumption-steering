@@ -2,10 +2,21 @@
 
 #include "EvadeBehavior.h"
 
-EvadeBehavior::EvadeBehavior()
+EvadeBehavior::EvadeBehavior(AActor* actr)
+	:BehaviorInterface(actr)
 {
 }
 
 EvadeBehavior::~EvadeBehavior()
 {
+}
+
+void EvadeBehavior::Start(std::function<void(BehaviorInterface*)> callback)
+{
+	callback(this);
+}
+
+void EvadeBehavior::RunBehavior()
+{
+
 }

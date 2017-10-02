@@ -8,11 +8,11 @@
 /**
  * 
  */
-class SUBSUMPTIONSTEERING_API EvadeBehavior : public BehaviorInterface
+class SUBSUMPTIONSTEERING_API AttackBehavior : public BehaviorInterface
 {
 public:
-	EvadeBehavior(AActor*);
-	~EvadeBehavior();
+	AttackBehavior(AActor*);
+	~AttackBehavior();
 	void Start(std::function<void(BehaviorInterface*)>);
 	void RunBehavior();
 };

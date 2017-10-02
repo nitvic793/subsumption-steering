@@ -6,6 +6,16 @@
 #include "BehaviorInterface.h"
 #include <vector>
 #include <string>
+#include <Runtime/Core/Public/HAL/Runnable.h>
+#include <Runtime/Core/Public/HAL/RunnableThread.h>
+
+#include "SteerBehavior.h"
+#include "WanderBehavior.h"
+#include "AttackBehavior.h"
+#include "EatBehavior.h"
+#include "PursueBehavior.h"
+#include "FleeBehavior.h"
+#include "EvadeBehavior.h"
 
 struct NodePriority
 {
@@ -35,7 +45,12 @@ struct NodePriorityPredicate
 
 enum BehaviorEnum {
 	WANDER,
-	STEER
+	STEER,
+	PURSUE,
+	FLEE,
+	EVADE,
+	ATTACK,
+	EAT
 };
 
 /**

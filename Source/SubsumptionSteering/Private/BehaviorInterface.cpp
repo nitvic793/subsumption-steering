@@ -4,11 +4,15 @@
 
 BehaviorInterface::BehaviorInterface()
 {
+	velocity = FVector(5, 0, 0);
+	target = FVector(600, 600, 80);
 }
 
 BehaviorInterface::BehaviorInterface(AActor* actr) 
 	: actor(actr)
 {
+	velocity = FVector(5, 0, 0);
+	target = FVector(600, 600, 80);
 }
 
 BehaviorInterface::~BehaviorInterface()

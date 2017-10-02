@@ -15,6 +15,17 @@ protected:
 	AActor *actor;
 	int priority = 1;
 public:
+	FVector target;
+	float maxVelocity = 10.f;
+	FVector desiredVelocity;
+	float mass = 10.f;
+	float maxForce = 10.f;
+	float maxSpeed = 3.f;
+	float wanderAngle = 0.f;
+	float slowingRadius = 300.f;
+	FVector velocity;
+	FVector position;
+
 	BehaviorInterface();
 	BehaviorInterface(AActor *);
 	virtual ~BehaviorInterface();
@@ -33,5 +44,5 @@ public:
 	int GetPriority()
 	{
 		return priority;
-	}
+	}	
 };

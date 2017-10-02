@@ -9,8 +9,6 @@ SteerBehavior::SteerBehavior(AActor* actor)
 	:BehaviorInterface(actor)
 {
 	priority = 1;
-	velocity = FVector(5, 0, 0);
-	target = FVector(600, 600, 80);
 }
 
 SteerBehavior::~SteerBehavior()

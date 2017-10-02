@@ -4,15 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorInterface.h"
-
 /**
  * 
  */
-class SUBSUMPTIONSTEERING_API EvadeBehavior : public BehaviorInterface
+class SUBSUMPTIONSTEERING_API EatBehavior : public BehaviorInterface
 {
 public:
-	EvadeBehavior(AActor*);
-	~EvadeBehavior();
+	EatBehavior(AActor*);
+	~EatBehavior();
 	void Start(std::function<void(BehaviorInterface*)>);
 	void RunBehavior();
 };

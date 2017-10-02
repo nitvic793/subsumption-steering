@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+#include <Runtime/Core/Public/HAL/RunnableThread.h>
+#include <Runtime/Core/Public/HAL/Runnable.h>
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BehaviorArbiter.h"
@@ -23,10 +25,13 @@ public:
 	float maxSpeed = 3.f;
 	float wanderAngle = 0.f;
 	float slowingRadius = 300.f;
+	UPROPERTY(EditAnywhere, Category="State")
+	int32 health = 100;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	void RunTraceThread();
 	void SteeringBehavior();
 	void WanderBehavior();
 	void BehaviorUpdate();

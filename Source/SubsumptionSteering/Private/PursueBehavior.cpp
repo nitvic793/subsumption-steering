@@ -2,10 +2,21 @@
 
 #include "PursueBehavior.h"
 
-PursueBehavior::PursueBehavior()
+PursueBehavior::PursueBehavior(AActor* actr)
+	:BehaviorInterface(actr)
 {
 }
 
 PursueBehavior::~PursueBehavior()
 {
+}
+
+void PursueBehavior::Start(std::function<void(BehaviorInterface*)> callback)
+{
+	callback(this);
+}
+
+void PursueBehavior::RunBehavior()
+{
+
 }

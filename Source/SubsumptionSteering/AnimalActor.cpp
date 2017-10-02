@@ -4,7 +4,21 @@
 #include <Runtime/Engine/Classes/Engine/World.h>
 #include <Runtime/Engine/Public/TimerManager.h>
 
+class BackgroundWorker : public FRunnable
+{
+public:
+	uint32 Run()
+	{
 
+	}
+protected:
+	BackgroundWorker(AAnimalActor* actr):
+		actor(actr)
+	{
+	}
+
+	AAnimalActor* actor;
+};
 
 // Sets default values
 AAnimalActor::AAnimalActor()
@@ -21,6 +35,7 @@ void AAnimalActor::BeginPlay()
 {
 	Super::BeginPlay();
 	behaviorArbiter->StartBehavior();
+	//Update behavior every 0.5 seconds
 	GetWorld()->GetTimerManager().SetTimer(behaviorTimer, this, &AAnimalActor::BehaviorUpdate, 0.5f, true, 1.f);
 }
 
@@ -29,31 +44,10 @@ void AAnimalActor::BehaviorUpdate()
 	behaviorArbiter->UpdateBehavior();
 }
 
-//FVector Truncate(FVector vector, float max)
-//{
-//	float length;
-//	FVector f;
-//	vector.ToDirectionAndLength(f, length);
-//	float i = max / length;
-//	i = (i < 1.f) ? i : 1.0;
-//	vector = vector * i;
-//	return vector;
-//}
-//
-//const float Length(const FVector& v)
-//{
-//	float l;
-//	FVector f;
-//	v.ToDirectionAndLength(f, l);
-//	return l;
-//}
-//
-//void SetAngle(FVector& v, float angle)
-//{
-//	float l = Length(v);
-//	v.X = FMath::Cos(angle) * l;
-//	v.Y = FMath::Sin(angle) * l;
-//}
+void AAnimalActor::RunTraceThread() {
+
+}
+
 
 void AAnimalActor::SteeringBehavior()
 {
@@ -119,8 +113,7 @@ void AAnimalActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	//SteeringBehavior();
-	WanderBehavior();
-	//Add Timer code here to update behavior 
+	//WanderBehavior();
 	behaviorArbiter->RunBehavior();
 }
 
