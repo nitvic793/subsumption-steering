@@ -4,17 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorInterface.h"
-
 /**
  * 
  */
-class SUBSUMPTIONSTEERING_API PursueBehavior : public BehaviorInterface
+class SUBSUMPTIONSTEERING_API DeathBehavior : public BehaviorInterface
 {
-protected:
-	FVector targetVelocity;
 public:
-	PursueBehavior(AActor*);
-	~PursueBehavior();
+	DeathBehavior(AActor*);
+	~DeathBehavior();
 	void Start(std::function<void(BehaviorInterface*)>);
 	void RunBehavior();
 };

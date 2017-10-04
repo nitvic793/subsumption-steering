@@ -16,6 +16,7 @@
 #include "PursueBehavior.h"
 #include "FleeBehavior.h"
 #include "EvadeBehavior.h"
+#include "DeathBehavior.h"
 
 struct NodePriority
 {
@@ -50,7 +51,8 @@ enum BehaviorEnum {
 	FLEE,
 	EVADE,
 	ATTACK,
-	EAT
+	EAT,
+	DIE
 };
 
 /**

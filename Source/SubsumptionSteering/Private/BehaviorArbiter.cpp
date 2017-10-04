@@ -13,6 +13,7 @@ BehaviorArbiter::BehaviorArbiter(AActor *actr)
 	AddBehaviorLevel(EVADE, new EvadeBehavior(actr));
 	AddBehaviorLevel(ATTACK, new AttackBehavior(actr));
 	AddBehaviorLevel(EAT, new EatBehavior(actr));
+	AddBehaviorLevel(DIE, new DeathBehavior(actr));
 }
 
 BehaviorArbiter::~BehaviorArbiter()

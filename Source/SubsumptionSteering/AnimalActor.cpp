@@ -34,7 +34,7 @@ public:
 				return 0;
 			mMutex.Lock();
 			FVector start = this->actor->GetActorLocation();
-			FVector end = actor->GetActorRotation().Vector() * maxDistance;
+			FVector end = start + (actor->GetActorRotation().Vector() * maxDistance) + FVector(0, 0, 80.f);
 			bool didTrace = world->LineTraceSingleByObjectType(
 				HitOut,
 				start,
@@ -80,20 +80,20 @@ public:
 		float maxDistance = 1000.f;
 		//Ignore Actors
 		TraceParams.AddIgnoredActor(actor);
-
-		float sphereRadius = 200.f;
+		float sphereRadius = 400.f;
 		FCollisionObjectQueryParams ObjectTraceParams;
+		
 		ObjectTraceParams.AddObjectTypesToQuery(ECC_WorldDynamic);
 		//Re-initialize hit info
-		auto HitOut = FHitResult(ForceInit);
+		auto HitOuts = TArray<FHitResult>();
 		while (true) {
 			if (shouldStop)
 				return 0;
 			mMutex.Lock();
 			FVector start = this->actor->GetActorLocation();
 			FVector end = actor->GetActorRotation().Vector() * maxDistance;
-			bool didSweep = world->SweepSingleByObjectType(
-				HitOut,
+			bool didSweep = world->SweepMultiByObjectType(
+				HitOuts,
 				start,
 				end,
 				FQuat(),
@@ -101,10 +101,10 @@ public:
 				FCollisionShape::MakeSphere(sphereRadius),
 				TraceParams
 			);
-			actor->sphereHitResult = HitOut;
+			actor->sphereHitResult = HitOuts;
 			mMutex.Unlock();
 		}
-		auto otherActor = HitOut.GetActor();
+
 		return 0;
 	}
 
@@ -135,8 +135,8 @@ void AAnimalActor::BeginPlay()
 	sphereWorkerThread = FRunnableThread::Create(new SphereCollisionWorker(this), TEXT("SphereCollisionThread"));
 	Super::BeginPlay();
 	behaviorArbiter->StartBehavior();
-	//Update behavior every 0.2 seconds
-	GetWorld()->GetTimerManager().SetTimer(behaviorTimer, this, &AAnimalActor::BehaviorUpdate, 0.2f, true, 1.f);
+	//Update behavior every 0.1 seconds
+	GetWorld()->GetTimerManager().SetTimer(behaviorTimer, this, &AAnimalActor::BehaviorUpdate, 0.05f, true);
 }
 
 void AAnimalActor::EndPlay(EEndPlayReason::Type reason) {
@@ -150,8 +150,9 @@ void AAnimalActor::BehaviorUpdate()
 	behaviorArbiter->UpdateBehavior();
 }
 
-void AAnimalActor::RunTraceThread() {
-
+void AAnimalActor::InflictDamage(AAnimalActor* targetAnimal)
+{
+	targetAnimal->health = targetAnimal->health - this->hitPoints;
 }
 
 

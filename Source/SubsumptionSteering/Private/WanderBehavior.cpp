@@ -72,6 +72,7 @@ void WanderBehavior::RunBehavior()
 	auto rotator = FRotationMatrix::MakeFromX(position - actor->GetActorLocation()).Rotator();
 	actor->SetActorLocation(position);
 	actor->SetActorRotation(rotator);
+	SyncInfo();
 }
 
 

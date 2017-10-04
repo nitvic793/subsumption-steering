@@ -31,6 +31,7 @@ public:
 	virtual ~BehaviorInterface();
 	virtual void Start(std::function<void(BehaviorInterface*)>);
 	virtual void RunBehavior();
+	virtual void SyncInfo();
 	void SetActor(AActor *actr)
 	{
 		this->actor = actr;

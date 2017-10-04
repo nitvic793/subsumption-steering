@@ -9,7 +9,7 @@
 FleeBehavior::FleeBehavior(AActor* actr)
 	:BehaviorInterface(actr)
 {
-	priority = 4;
+	priority = 7;
 }
 
 FleeBehavior::~FleeBehavior()
@@ -19,7 +19,16 @@ FleeBehavior::~FleeBehavior()
 void FleeBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 {
 	auto animal = (AAnimalActor*)actor;
-	if (animal->health < 20) {
+	bool isAttackerNearby = false;
+	for (auto hitResult : animal->sphereHitResult) {
+		auto hitActor = hitResult.GetActor();
+		if (hitActor == nullptr)continue;
+		if (hitActor->IsA<AAnimalActor>()) {
+			isAttackerNearby = true;
+			break;
+		}
+	}
+	if (animal->health < 20 && isAttackerNearby) {
 		callback(this);
 	}
 }

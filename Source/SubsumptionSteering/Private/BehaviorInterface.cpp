@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BehaviorInterface.h"
+#include "AnimalActor.h"
 
 BehaviorInterface::BehaviorInterface()
 {
@@ -22,9 +23,17 @@ BehaviorInterface::~BehaviorInterface()
 void BehaviorInterface::Start(std::function<void(BehaviorInterface*)> callback) 
 {
 	callback(this);
-}
+} 
 
 void BehaviorInterface::RunBehavior() 
 {
 
+}
+
+void BehaviorInterface::SyncInfo()
+{
+	auto animal = (AAnimalActor*)actor;
+	animal->velocity = velocity;
+	animal->position = position;
+	animal->desiredVelocity = desiredVelocity;
 }

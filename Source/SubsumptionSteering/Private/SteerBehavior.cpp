@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SteerBehavior.h"
+#include "FoodItemActor.h"
 #include "Utility.h"
 #include "AnimalActor.h"
 #include <Runtime/Engine/Classes/Engine/World.h>
@@ -19,9 +20,14 @@ SteerBehavior::~SteerBehavior()
 void SteerBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 {
 	auto animal = (AAnimalActor*)actor;
+	float length;
+	FVector direction;
+	FVector location = animal->GetActorLocation();
+
 	if (targetFixed) {
-		FVector location = animal->GetActorLocation(); 
-		if ((target - location).IsNearlyZero(0.1f))
+		auto delta = target - location;
+		delta.ToDirectionAndLength(direction, length);
+		if (length < 100)
 		{
 			targetFixed = false;
 			return;
@@ -30,6 +36,7 @@ void SteerBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 		return;
 	}
 	if (animal->traceHitResult.GetActor() != nullptr) {
+		if (!animal->traceHitResult.GetActor()->IsA<AFoodItemActor>()) return;
 		target = animal->traceHitResult.GetActor()->GetActorLocation();
 		targetFixed = true;
 		callback(this);
@@ -50,7 +57,7 @@ bool SteerBehavior::HasTarget(FVector& OutVector)
 	//Ignore Actors
 	TraceParams.AddIgnoredActor(actor);
 	FVector start = this->actor->GetActorLocation();
-	FVector end = actor->GetActorRotation().Vector() * maxDistance;
+	FVector end = start + (actor->GetActorRotation().Vector() * maxDistance) + FVector(0, 0, 80.f);
 	float sphereRadius = 800.f;
 	FCollisionObjectQueryParams ObjectTraceParams;
 	ObjectTraceParams.AddObjectTypesToQuery(ECC_WorldDynamic);
@@ -102,4 +109,5 @@ void SteerBehavior::RunBehavior()
 	velocity = Utility::Truncate(velocity + steering, maxSpeed);//.GetClampedToMaxSize2D(maxSpeed);
 	position = position + velocity;
 	actor->SetActorLocation(position);
+	SyncInfo();
 }

@@ -8,7 +8,6 @@
 #include "BehaviorArbiter.h"
 #include "AnimalActor.generated.h"
 
-
 UCLASS()
 class SUBSUMPTIONSTEERING_API AAnimalActor : public AActor
 {
@@ -17,6 +16,7 @@ class SUBSUMPTIONSTEERING_API AAnimalActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AAnimalActor();
+	void InflictDamage(AAnimalActor*);
 	FVector target;
 	float maxVelocity = 10.f;
 	FVector desiredVelocity;
@@ -25,10 +25,12 @@ public:
 	float maxSpeed = 3.f;
 	float wanderAngle = 0.f;
 	float slowingRadius = 300.f;
-	UPROPERTY(EditAnywhere, Category="State")
+	FVector velocity;
+	FVector position;
 	int32 health = 100;
+	int32 hitPoints = 6;
 	FHitResult traceHitResult;
-	FHitResult sphereHitResult;
+	TArray<FHitResult> sphereHitResult;
 	FRunnableThread* traceWorkerThread;
 	FRunnableThread* sphereWorkerThread;
 
@@ -36,19 +38,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void EndPlay(EEndPlayReason::Type) override;
-	void RunTraceThread();
 	void SteeringBehavior();
 	void WanderBehavior();
 	void BehaviorUpdate();
 	FVector Seek(FVector target);
-	FVector velocity;
-	FVector position;
+
 	BehaviorArbiter *behaviorArbiter;
 	FTimerHandle behaviorTimer;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	
-	
 };
