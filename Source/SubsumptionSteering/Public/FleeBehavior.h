@@ -13,5 +13,5 @@ public:
 	FleeBehavior(AActor*);
 	~FleeBehavior();
 	void Start(std::function<void(BehaviorInterface*)>);
-	void RunBehavior();
+	void RunBehavior(float deltaTime);
 };

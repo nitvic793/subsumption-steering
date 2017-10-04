@@ -20,25 +20,40 @@ SteerBehavior::~SteerBehavior()
 void SteerBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 {
 	auto animal = (AAnimalActor*)actor;
-	float length;
+	AActor *hostile = nullptr;
+	AActor *food = nullptr;
+	float length = -1.f;
 	FVector direction;
 	FVector location = animal->GetActorLocation();
-
-	if (targetFixed) {
-		auto delta = target - location;
-		delta.ToDirectionAndLength(direction, length);
-		if (length < 100)
-		{
-			targetFixed = false;
-			return;
+	bool isAttackerNearby = false;
+	for (auto hitResult : animal->sphereHitResult) {
+		auto hitActor = hitResult.GetActor();
+		if (hitActor == nullptr)continue;
+		if (hitActor->IsA<AAnimalActor>()) {
+			hostile = hitActor;
+			isAttackerNearby = true;
+			break;
 		}
-		callback(this);
-		return;
+		else if (hitActor->IsA<AFoodItemActor>()) {
+			food = hitActor;
+		}
 	}
+
+	if (isAttackerNearby)
+	{
+		auto delta = animal->GetActorLocation() - hostile->GetActorLocation();
+		delta.ToDirectionAndLength(direction, length);
+	}
+
 	if (animal->traceHitResult.GetActor() != nullptr) {
-		if (!animal->traceHitResult.GetActor()->IsA<AFoodItemActor>()) return;
-		target = animal->traceHitResult.GetActor()->GetActorLocation();
-		targetFixed = true;
+		if (animal->traceHitResult.GetActor()->IsA<AFoodItemActor>())
+			food = animal->traceHitResult.GetActor();
+	}
+
+	if (food != nullptr) {
+		target = food->GetActorLocation();
+		targetFixed = true; 
+		if (animal->health <= 20.f && (length>0.f && length < 1500.f)) return;
 		callback(this);
 	}
 }
@@ -87,7 +102,7 @@ bool SteerBehavior::HasTarget(FVector& OutVector)
 	return false;
 }
 
-void SteerBehavior::RunBehavior()
+void SteerBehavior::RunBehavior(float deltaTime)
 {
 	position = actor->GetActorLocation();
 	float angle = position.CosineAngle2D(target);

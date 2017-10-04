@@ -70,6 +70,6 @@ public:
 	~BehaviorArbiter();
 	void AddBehaviorLevel(BehaviorEnum, BehaviorInterface*);
 	void StartBehavior();
-	void RunBehavior();
+	void RunBehavior(float deltaTime);
 	void UpdateBehavior();
 };

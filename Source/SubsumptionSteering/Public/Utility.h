@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
 
 /**
  * Utility Functions
@@ -37,5 +38,14 @@ public:
 		float l = Length(v);
 		v.X = FMath::Cos(angle) * l;
 		v.Y = FMath::Sin(angle) * l;
+	}
+
+	static float GetDistanceBetweenActors(AActor* a, AActor *b)
+	{
+		FVector direction;
+		float length = 0.f;
+		auto delta = a->GetActorLocation() - b->GetActorLocation();
+		delta.ToDirectionAndLength(direction, length);
+		return length;
 	}
 };

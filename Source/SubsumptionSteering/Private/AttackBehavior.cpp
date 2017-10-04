@@ -16,17 +16,18 @@ AttackBehavior::~AttackBehavior()
 void AttackBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 {
 	auto animal = (AAnimalActor*)actor;
-	AAnimalActor* targetAnimal = nullptr;
+	targetAnimal = nullptr;
 	bool isAttackerNearby = false;
 	for (auto hitResult : animal->sphereHitResult) {
 		auto hitActor = hitResult.GetActor();
 		if (hitActor == nullptr)continue;
 		if (hitActor->IsA<AAnimalActor>()) {
 			isAttackerNearby = true;
-			targetAnimal = (AAnimalActor*)hitActor;
+			targetAnimal = hitActor;
 			break;
 		}
 	}
+
 	if (targetAnimal == nullptr)return;
 	position = actor->GetActorLocation();
 	auto delta = position - targetAnimal->GetActorLocation();
@@ -39,7 +40,15 @@ void AttackBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 	//callback(this);
 }
 
-void AttackBehavior::RunBehavior()
+void AttackBehavior::RunBehavior(float deltaTime)
 {
-
+	if (targetAnimal == nullptr)return;
+	auto animal = (AAnimalActor*)actor;
+	if (currentTime > 0.6f) {
+		currentTime = 0.f;
+		animal->InflictDamage((AAnimalActor*)targetAnimal);
+	}
+	else {
+		currentTime += deltaTime;
+	}
 }

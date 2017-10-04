@@ -47,7 +47,7 @@ void WanderBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 }
 
 
-void WanderBehavior::RunBehavior()
+void WanderBehavior::RunBehavior(float deltaTime)
 {
 	const float CIRCLE_DISTANCE = 20.f;
 	const float CIRCLE_RADIUS = 10.f;

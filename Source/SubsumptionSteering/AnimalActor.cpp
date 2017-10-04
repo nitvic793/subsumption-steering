@@ -77,10 +77,10 @@ public:
 		TraceParams.TraceTag = TraceTag;
 		//TraceParams.bTraceAsyncScene = true;
 		TraceParams.bReturnPhysicalMaterial = false;
-		float maxDistance = 1000.f;
+		float maxDistance = 600.f;
 		//Ignore Actors
 		TraceParams.AddIgnoredActor(actor);
-		float sphereRadius = 400.f;
+		float sphereRadius = 600.f;
 		FCollisionObjectQueryParams ObjectTraceParams;
 		
 		ObjectTraceParams.AddObjectTypesToQuery(ECC_WorldDynamic);
@@ -92,6 +92,7 @@ public:
 			mMutex.Lock();
 			FVector start = this->actor->GetActorLocation();
 			FVector end = actor->GetActorRotation().Vector() * maxDistance;
+			HitOuts.Empty();
 			bool didSweep = world->SweepMultiByObjectType(
 				HitOuts,
 				start,
@@ -221,6 +222,6 @@ void AAnimalActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	//SteeringBehavior();
 	//WanderBehavior();
-	behaviorArbiter->RunBehavior();
+	behaviorArbiter->RunBehavior(DeltaTime);
 }
 

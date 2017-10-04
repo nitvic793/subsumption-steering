@@ -20,6 +20,8 @@ void PursueBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 	bool foundActor = false;
 	bool foundFood = false;
 	auto animal = (AAnimalActor*)actor;
+	AActor* hostile = nullptr;
+	AActor* food = nullptr;
 	for (auto hitResult : animal->sphereHitResult) {
 		auto hitActor = hitResult.GetActor();
 		if (hitActor == nullptr)continue;
@@ -28,19 +30,24 @@ void PursueBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 			auto targetAnimal = (AAnimalActor*)hitActor;
 			target = hitActor->GetActorLocation();
 			targetVelocity = targetAnimal->velocity;
+			hostile = hitActor;
 		}
 		else if (hitActor->IsA<AFoodItemActor>()) {
 			foundFood = true;
+			food = hitActor;
 		}
 	}
 
 	if (foundActor && foundFood && animal->health>70) {
-		callback(this);
+		if (Utility::GetDistanceBetweenActors(actor, hostile) < 400.f)
+		{
+			callback(this);
+		}		
 	}
 	
 }
 
-void PursueBehavior::RunBehavior()
+void PursueBehavior::RunBehavior(float deltaTime)
 {
 	const int TIME = 3;
 	position = actor->GetActorLocation();

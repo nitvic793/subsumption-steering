@@ -16,7 +16,7 @@ void EvadeBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 	callback(this);
 }
 
-void EvadeBehavior::RunBehavior()
+void EvadeBehavior::RunBehavior(float deltaTime)
 {
 
 }

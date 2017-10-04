@@ -31,7 +31,7 @@ void BehaviorArbiter::StartBehavior()
 		});
 	}
 }
-void BehaviorArbiter::RunBehavior()
+void BehaviorArbiter::RunBehavior(float deltaTime)
 {
 	NodePriority top;
 	if (behaviorQueue.Num() == 0)
@@ -42,7 +42,7 @@ void BehaviorArbiter::RunBehavior()
 		currentBehavior = top.behavior;
 
 	if (currentBehavior != nullptr) {
-		currentBehavior->RunBehavior();
+		currentBehavior->RunBehavior(deltaTime);
 	}
 	if (behaviorQueue.Num() != 0)
 		behaviorQueue.Empty();

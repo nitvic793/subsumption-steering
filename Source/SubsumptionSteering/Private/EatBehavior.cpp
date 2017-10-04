@@ -38,7 +38,7 @@ void EatBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 		callback(this);
 }
 
-void EatBehavior::RunBehavior()
+void EatBehavior::RunBehavior(float deltaTime)
 {
 
 }

@@ -14,7 +14,7 @@ public:
 	WanderBehavior(AActor*);
 	~WanderBehavior();
 	void Start(std::function<void(BehaviorInterface*)>);
-	void RunBehavior();
+	void RunBehavior(float deltaTime);
 protected:
 	FVector target;
 	float maxVelocity = 10.f;

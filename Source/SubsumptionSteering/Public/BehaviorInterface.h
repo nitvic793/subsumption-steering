@@ -30,7 +30,7 @@ public:
 	BehaviorInterface(AActor *);
 	virtual ~BehaviorInterface();
 	virtual void Start(std::function<void(BehaviorInterface*)>);
-	virtual void RunBehavior();
+	virtual void RunBehavior(float deltaTime);
 	virtual void SyncInfo();
 	void SetActor(AActor *actr)
 	{

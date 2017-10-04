@@ -17,6 +17,9 @@ public:
 	// Sets default values for this actor's properties
 	AAnimalActor();
 	void InflictDamage(AAnimalActor*);
+	bool IsDead() {
+		return health <= 0;
+	}
 	FVector target;
 	float maxVelocity = 10.f;
 	FVector desiredVelocity;
@@ -28,6 +31,7 @@ public:
 	FVector velocity;
 	FVector position;
 	int32 health = 100;
+	UPROPERTY(EditAnywhere, Category = State)
 	int32 hitPoints = 6;
 	FHitResult traceHitResult;
 	TArray<FHitResult> sphereHitResult;

@@ -16,11 +16,13 @@ DeathBehavior::~DeathBehavior()
 void DeathBehavior::Start(std::function<void(BehaviorInterface*)> callback) 
 {
 	auto animal = (AAnimalActor*)actor;
-	if (animal->health <= 0) {
+	if (animal->IsDead()) {
 		callback(this);
 	}
 }
 
-void DeathBehavior::RunBehavior() {
+void DeathBehavior::RunBehavior(float deltaTime) {
+	auto animal = (AAnimalActor*)actor;
+	animal->Destroy();
 	//Do nothing when dead
 }

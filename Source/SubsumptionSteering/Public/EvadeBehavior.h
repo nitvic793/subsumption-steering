@@ -14,5 +14,5 @@ public:
 	EvadeBehavior(AActor*);
 	~EvadeBehavior();
 	void Start(std::function<void(BehaviorInterface*)>);
-	void RunBehavior();
+	void RunBehavior(float deltaTime);
 };

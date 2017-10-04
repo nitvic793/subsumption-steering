@@ -25,7 +25,7 @@ void BehaviorInterface::Start(std::function<void(BehaviorInterface*)> callback)
 	callback(this);
 } 
 
-void BehaviorInterface::RunBehavior() 
+void BehaviorInterface::RunBehavior(float deltaTime)
 {
 
 }

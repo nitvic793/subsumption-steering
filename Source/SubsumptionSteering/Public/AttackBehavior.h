@@ -14,5 +14,8 @@ public:
 	AttackBehavior(AActor*);
 	~AttackBehavior();
 	void Start(std::function<void(BehaviorInterface*)>);
-	void RunBehavior();
+	void RunBehavior(float deltaTime);
+protected:
+	float currentTime = 0.f;
+	AActor* targetAnimal;
 };

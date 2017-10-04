@@ -19,21 +19,29 @@ FleeBehavior::~FleeBehavior()
 void FleeBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 {
 	auto animal = (AAnimalActor*)actor;
+	AActor *hostile = nullptr;
 	bool isAttackerNearby = false;
 	for (auto hitResult : animal->sphereHitResult) {
 		auto hitActor = hitResult.GetActor();
 		if (hitActor == nullptr)continue;
 		if (hitActor->IsA<AAnimalActor>()) {
+			hostile = hitActor;
 			isAttackerNearby = true;
 			break;
 		}
 	}
-	if (animal->health < 20 && isAttackerNearby) {
+	if (hostile == nullptr)return;
+	auto delta = animal->GetActorLocation() - hostile->GetActorLocation();
+	FVector direction;
+	float length;
+	delta.ToDirectionAndLength(direction, length);
+
+	if (animal->health <= 20 && isAttackerNearby && length < 300.f) {
 		callback(this);
 	}
 }
 
-void FleeBehavior::RunBehavior()
+void FleeBehavior::RunBehavior(float deltaTime)
 {
 	position = actor->GetActorLocation();
 	float angle = position.CosineAngle2D(target);
@@ -46,6 +54,6 @@ void FleeBehavior::RunBehavior()
 	steering = steering.GetClampedToMaxSize2D(maxForce);
 	steering = steering / mass;
 	velocity = Utility::Truncate(velocity + steering, maxSpeed);//.GetClampedToMaxSize2D(maxSpeed);
-	position = position + velocity;
+	position = position + velocity; 
 	actor->SetActorLocation(position);
 }

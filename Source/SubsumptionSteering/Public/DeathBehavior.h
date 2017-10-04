@@ -13,5 +13,5 @@ public:
 	DeathBehavior(AActor*);
 	~DeathBehavior();
 	void Start(std::function<void(BehaviorInterface*)>);
-	void RunBehavior();
+	void RunBehavior(float deltaTime);
 };
