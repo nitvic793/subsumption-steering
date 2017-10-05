@@ -35,10 +35,22 @@ void EatBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 	FVector direction;
 	delta.ToDirectionAndLength(direction, length);
 	if (length < 100)
+	{
+		currentFood = food;
 		callback(this);
+	}
 }
 
 void EatBehavior::RunBehavior(float deltaTime)
 {
-
+	if (currentTime >= 2.0f && currentFood != nullptr) {
+		auto animal = (AAnimalActor*)actor;
+		animal->health = 100;
+		currentFood->Destroy();
+		currentFood = nullptr;
+		currentTime = 0;
+	}
+	else {
+		currentTime += deltaTime;
+	}
 }

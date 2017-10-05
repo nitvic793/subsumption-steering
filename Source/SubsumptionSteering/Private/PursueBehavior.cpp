@@ -38,13 +38,13 @@ void PursueBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 		}
 	}
 
-	if (foundActor && foundFood && animal->health>=70) {
-		if (Utility::GetDistanceBetweenActors(actor, hostile) < 600.f)
+	if (foundActor && foundFood && animal->health >= 70) {
+		if (Utility::GetDistanceBetweenActors(actor, hostile) < 600.f && Utility::GetDistanceBetweenActors(actor, food) < 300.f)
 		{
 			callback(this);
-		}		
+		}
 	}
-	
+
 }
 
 void PursueBehavior::RunBehavior(float deltaTime)

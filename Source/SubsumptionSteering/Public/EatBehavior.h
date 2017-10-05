@@ -14,4 +14,7 @@ public:
 	~EatBehavior();
 	void Start(std::function<void(BehaviorInterface*)>);
 	void RunBehavior(float deltaTime);
+protected:
+	AActor* currentFood;
+	float currentTime = 0.f;
 };

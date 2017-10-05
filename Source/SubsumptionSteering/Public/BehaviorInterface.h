@@ -16,10 +16,10 @@ protected:
 	int priority = 1;
 public:
 	FVector target;
-	float maxVelocity = 10.f;
+	float maxVelocity = 20.f;
 	FVector desiredVelocity;
 	float mass = 10.f;
-	float maxForce = 10.f;
+	float maxForce = 20.f;
 	float maxSpeed = 3.f;
 	float wanderAngle = 0.f;
 	float slowingRadius = 300.f;

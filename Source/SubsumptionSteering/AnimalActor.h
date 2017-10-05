@@ -30,6 +30,7 @@ public:
 	float slowingRadius = 300.f;
 	FVector velocity;
 	FVector position;
+	UPROPERTY(EditAnywhere, Category = State)
 	int32 health = 100;
 	UPROPERTY(EditAnywhere, Category = State)
 	int32 hitPoints = 6;

@@ -49,8 +49,8 @@ void WanderBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 
 void WanderBehavior::RunBehavior(float deltaTime)
 {
-	const float CIRCLE_DISTANCE = 20.f;
-	const float CIRCLE_RADIUS = 10.f;
+	const float CIRCLE_DISTANCE = 50.f;
+	const float CIRCLE_RADIUS = 5.f;
 	const float ANGLE_CHANGE = 2.f;
     position = actor->GetActorLocation();
 	FVector circleCenter = velocity;

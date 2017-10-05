@@ -2,6 +2,8 @@
 
 #include "AttackBehavior.h"
 #include "AnimalActor.h"
+#include "FoodItemActor.h"
+#include "Utility.h"
 
 AttackBehavior::AttackBehavior(AActor* actr)
 	:BehaviorInterface(actr)
@@ -16,6 +18,7 @@ AttackBehavior::~AttackBehavior()
 void AttackBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 {
 	auto animal = (AAnimalActor*)actor;
+	AActor* food = nullptr;
 	targetAnimal = nullptr;
 	bool isAttackerNearby = false;
 	for (auto hitResult : animal->sphereHitResult) {
@@ -24,17 +27,31 @@ void AttackBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 		if (hitActor->IsA<AAnimalActor>()) {
 			isAttackerNearby = true;
 			targetAnimal = hitActor;
-			break;
+		}
+		if (hitActor->IsA<AFoodItemActor>()) {
+			float distance = Utility::GetDistanceBetweenActors(actor, hitActor);
+			if (food == nullptr)
+			{
+				food = hitActor;
+			}
+			else
+			{
+				float currentDistance = Utility::GetDistanceBetweenActors(actor, food);
+				if (distance < currentDistance) {
+					food = hitActor;
+				}
+			}
 		}
 	}
 
-	if (targetAnimal == nullptr)return;
+	if (targetAnimal == nullptr || food == nullptr)return;
 	position = actor->GetActorLocation();
 	auto delta = position - targetAnimal->GetActorLocation();
 	FVector direction;
 	float length;
 	delta.ToDirectionAndLength(direction, length);
-	if (animal->health > 20 && isAttackerNearby && length < 120) {
+	float foodDistance = Utility::GetDistanceBetweenActors(actor, food);
+	if (animal->health > 20 && isAttackerNearby && length < 120 && foodDistance < 600.f) {
 		callback(this);
 	}
 	//callback(this);
