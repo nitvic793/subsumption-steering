@@ -36,7 +36,7 @@ void FleeBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 	float length;
 	delta.ToDirectionAndLength(direction, length);
 
-	if (animal->health <= 20 && isAttackerNearby && length < 300.f) {
+	if (animal->health <= 20 && isAttackerNearby && length < 700.f) {
 		callback(this);
 	}
 }

@@ -35,7 +35,18 @@ void SteerBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 			break;
 		}
 		else if (hitActor->IsA<AFoodItemActor>()) {
-			food = hitActor;
+			float distance = Utility::GetDistanceBetweenActors(actor, hitActor);
+			if (food == nullptr)
+			{
+				food = hitActor;
+			}
+			else
+			{
+				float currentDistance = Utility::GetDistanceBetweenActors(actor, food);
+				if (distance < currentDistance) {
+					food = hitActor;
+				}
+			}
 		}
 	}
 
@@ -52,8 +63,8 @@ void SteerBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 
 	if (food != nullptr) {
 		target = food->GetActorLocation();
-		targetFixed = true; 
-		if (animal->health <= 20.f && (length>0.f && length < 1500.f)) return;
+		targetFixed = true;
+		if (animal->health <= 20.f && (length < 200.f)) return;
 		callback(this);
 	}
 }
