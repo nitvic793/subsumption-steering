@@ -44,7 +44,6 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(EEndPlayReason::Type) override;
 	void BehaviorUpdate();
-	FVector Seek(FVector target);
 
 	BehaviorArbiter *behaviorArbiter;
 	FTimerHandle behaviorTimer;

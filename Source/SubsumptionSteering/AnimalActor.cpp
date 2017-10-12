@@ -4,6 +4,9 @@
 #include <Runtime/Engine/Classes/Engine/World.h>
 #include <Runtime/Engine/Public/TimerManager.h>
 
+/*
+Line trace thread
+*/
 class LineTraceWorker : public FRunnable
 {
 public:
@@ -60,6 +63,9 @@ protected:
 	AAnimalActor* actor;
 };
 
+/*
+Sphere collision check thread
+*/
 class SphereCollisionWorker : public FRunnable
 {
 public:
@@ -157,21 +163,10 @@ void AAnimalActor::InflictDamage(AAnimalActor* targetAnimal)
 	targetAnimal->health = targetAnimal->health - this->hitPoints;
 }
 
-
-
-FVector AAnimalActor::Seek(FVector target)
-{
-	return FVector();
-}
-
 // Called every frame
 void AAnimalActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (GetName() == "MainActor") {
-
-	}
-	behaviorArbiter->RunBehavior(DeltaTime);
+	behaviorArbiter->RunBehavior(DeltaTime); //Let behavior arbiter run the required behavior for the actor.
 }
 

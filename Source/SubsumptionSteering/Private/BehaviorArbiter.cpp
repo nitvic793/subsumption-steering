@@ -23,6 +23,7 @@ BehaviorArbiter::~BehaviorArbiter()
 void BehaviorArbiter::AddBehaviorLevel(BehaviorEnum name, BehaviorInterface* behavior) {
 	behaviorMap.Add(name, behavior);
 }
+
 void BehaviorArbiter::StartBehavior()
 {
 	for (auto i : behaviorMap) {

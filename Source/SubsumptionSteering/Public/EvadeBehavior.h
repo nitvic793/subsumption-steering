@@ -6,7 +6,7 @@
 #include "BehaviorInterface.h"
 
 /**
- * 
+ * Technically not evade. Repurposed to keep actors within bounds
  */
 class SUBSUMPTIONSTEERING_API EvadeBehavior : public BehaviorInterface
 {

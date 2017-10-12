@@ -22,22 +22,15 @@ EvadeBehavior::~EvadeBehavior()
 
 void EvadeBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 {
-	for (TActorIterator<AStaticMeshActor> ActorItr(actor->GetWorld()); ActorItr; ++ActorItr)
-	{
-		// Same as with the Object Iterator, access the subclass instance with the * or -> operators.
-		AStaticMeshActor *Mesh = *ActorItr;
-		if (Mesh->GetName() == "Floor") {
-			Mesh->ActorHasTag(FName(TEXT("test")));
-			floor = Mesh;
-		}
+	FVector location = actor->GetActorLocation();
+	if (location.X < -1360.f || location.X > 5700.f || location.Y > 6420.f || location.Y < -1210.f) {
+		callback(this);
 	}
-	FVector origin, box;
-	floor->GetActorBounds(false, origin, box);
-	auto location = floor->GetActorLocation();
-	UE_LOG(LogTemp, Log, TEXT("Bound %f %f %f %f %f %f"), origin.X, origin.Y, box.X, box.Y, location.X, location.Y);
 }
 
 void EvadeBehavior::RunBehavior(float deltaTime)
 {
-
+	//Respwan somewhere within bounds
+	FVector loc(900.f, 900.f, 80.f);
+	actor->SetActorLocation(loc);
 }
