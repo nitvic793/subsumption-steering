@@ -19,10 +19,12 @@ SteerBehavior::~SteerBehavior()
 
 void SteerBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 {
+	FVector tgt;
+	//HasTarget(tgt);
 	auto animal = (AAnimalActor*)actor;
 	AActor *hostile = nullptr;
 	AActor *food = nullptr;
-	float length = -1.f;
+	float length = MAX_FLT;
 	FVector direction;
 	FVector location = animal->GetActorLocation();
 	bool isAttackerNearby = false;
@@ -64,8 +66,12 @@ void SteerBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 	if (food != nullptr) {
 		target = food->GetActorLocation();
 		targetFixed = true;
-		if (animal->health <= 20.f && (length < 200.f)) return;
-		callback(this);
+		if (animal->health <= 20.f && (length < 800.f)) {
+			//UE_LOG(LogTemp, Log, TEXT("Steer %s"), actor->GetName());
+			return;
+		}
+		else if (Utility::GetDistanceBetweenActors(actor, food) < 1000.f)
+			callback(this);
 	}
 }
 

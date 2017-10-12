@@ -77,10 +77,10 @@ public:
 		TraceParams.TraceTag = TraceTag;
 		//TraceParams.bTraceAsyncScene = true;
 		TraceParams.bReturnPhysicalMaterial = false;
-		float maxDistance = 600.f;
+		float maxDistance = 1200.f;
 		//Ignore Actors
 		TraceParams.AddIgnoredActor(actor);
-		float sphereRadius = 600.f;
+		float sphereRadius = 1200.f;
 		FCollisionObjectQueryParams ObjectTraceParams;
 		
 		ObjectTraceParams.AddObjectTypesToQuery(ECC_WorldDynamic);
@@ -101,7 +101,7 @@ public:
 				ECollisionChannel::ECC_WorldDynamic,
 				FCollisionShape::MakeSphere(sphereRadius),
 				TraceParams
-			);
+			); 
 			actor->sphereHitResult = HitOuts;
 			mMutex.Unlock();
 		}
@@ -138,6 +138,7 @@ void AAnimalActor::BeginPlay()
 	behaviorArbiter->StartBehavior();
 	//Update behavior every 0.1 seconds
 	GetWorld()->GetTimerManager().SetTimer(behaviorTimer, this, &AAnimalActor::BehaviorUpdate, 0.05f, true);
+
 }
 
 void AAnimalActor::EndPlay(EEndPlayReason::Type reason) {
@@ -157,59 +158,6 @@ void AAnimalActor::InflictDamage(AAnimalActor* targetAnimal)
 }
 
 
-void AAnimalActor::SteeringBehavior()
-{
-	//position = GetActorLocation();
-	//float angle = position.CosineAngle2D(target);
-	//auto rotator = FRotationMatrix::MakeFromX(target - position).Rotator();
-	//SetActorRotation(rotator);
-	//auto delta = target - position;
-	//float distance = Length(delta);
-	//if (distance < slowingRadius)
-	//{
-	//	desiredVelocity = delta.GetSafeNormal() * maxVelocity * (distance / slowingRadius);
-	//}
-	//else
-	//{
-	//	desiredVelocity = delta.GetSafeNormal() * maxVelocity;
-	//}
-	//FVector steering = desiredVelocity - velocity;
-	//steering = steering.GetClampedToMaxSize2D(maxForce);
-	//steering = steering / mass;
-	//velocity = Truncate(velocity + steering, maxSpeed);//.GetClampedToMaxSize2D(maxSpeed);
-	//position = position + velocity;
-	//SetActorLocation(position);
-}
-
-
-
-void AAnimalActor::WanderBehavior()
-{
-	//const float CIRCLE_DISTANCE = 20.f;
-	//const float CIRCLE_RADIUS = 10.f;
-	//const float ANGLE_CHANGE = 2.f;
-	//position = GetActorLocation();
-	//FVector circleCenter = velocity;
-	//circleCenter.Normalize();
-	//circleCenter = circleCenter * CIRCLE_DISTANCE;
-	//FVector displacement(0, -1, 0);
-	//displacement = displacement * CIRCLE_RADIUS; 
-	//SetAngle(displacement, wanderAngle);
-	//wanderAngle += (FMath::RandRange(0.f, 1.f) * ANGLE_CHANGE) - (ANGLE_CHANGE * 0.5f);
-	//FVector wanderForce = circleCenter + displacement;
-
-	//FVector steering = wanderForce;
-	//steering = steering.GetClampedToMaxSize2D(maxForce);
-	//steering = steering / mass;
-	//velocity = Truncate(velocity + steering, maxSpeed);//.GetClampedToMaxSize2D(maxSpeed);
-	//position = position + velocity;
-
-	//float angle = GetActorLocation().CosineAngle2D(position);
-	//auto rotator = FRotationMatrix::MakeFromX(position - GetActorLocation()).Rotator();
-	//SetActorLocation(position);
-	//SetActorRotation(rotator);	
-}
-
 
 FVector AAnimalActor::Seek(FVector target)
 {
@@ -220,8 +168,10 @@ FVector AAnimalActor::Seek(FVector target)
 void AAnimalActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//SteeringBehavior();
-	//WanderBehavior();
+
+	if (GetName() == "MainActor") {
+
+	}
 	behaviorArbiter->RunBehavior(DeltaTime);
 }
 

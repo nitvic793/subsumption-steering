@@ -51,7 +51,7 @@ void AttackBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 	float length;
 	delta.ToDirectionAndLength(direction, length);
 	float foodDistance = Utility::GetDistanceBetweenActors(actor, food);
-	if (animal->health > 20 && isAttackerNearby && length < 120 && foodDistance < 600.f) {
+	if (animal->health > 20 && isAttackerNearby && length < 120.f && foodDistance < 600.f) {
 		callback(this);
 	}
 	//callback(this);

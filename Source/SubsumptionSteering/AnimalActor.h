@@ -43,8 +43,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void EndPlay(EEndPlayReason::Type) override;
-	void SteeringBehavior();
-	void WanderBehavior();
 	void BehaviorUpdate();
 	FVector Seek(FVector target);
 

@@ -33,13 +33,24 @@ void PursueBehavior::Start(std::function<void(BehaviorInterface*)> callback)
 			hostile = hitActor;
 		}
 		else if (hitActor->IsA<AFoodItemActor>()) {
-			foundFood = true;
-			food = hitActor;
+			foundFood = true; 
+			float distance = Utility::GetDistanceBetweenActors(actor, hitActor);
+			if (food == nullptr)
+			{
+				food = hitActor;
+			}
+			else
+			{
+				float currentDistance = Utility::GetDistanceBetweenActors(actor, food);
+				if (distance < currentDistance) {
+					food = hitActor;
+				}
+			}
 		}
 	}
 
 	if (foundActor && foundFood && animal->health >= 70) {
-		if (Utility::GetDistanceBetweenActors(actor, hostile) < 600.f && Utility::GetDistanceBetweenActors(actor, food) < 300.f)
+		if (Utility::GetDistanceBetweenActors(actor, hostile) < 600.f && Utility::GetDistanceBetweenActors(actor, food) < 600.f)
 		{
 			callback(this);
 		}

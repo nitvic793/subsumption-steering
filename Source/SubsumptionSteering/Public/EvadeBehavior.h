@@ -15,4 +15,6 @@ public:
 	~EvadeBehavior();
 	void Start(std::function<void(BehaviorInterface*)>);
 	void RunBehavior(float deltaTime);
+private:
+	AActor* floor;
 };
